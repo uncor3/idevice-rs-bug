@@ -2,7 +2,7 @@
 
 ```bash
 git clone https://github.com/uncor3/idevice-rs-bug.git --recursive
-cd idevice-rs-test
+cd idevice-rs-bug
 cmake -B build
 cmake --build build
 ```
