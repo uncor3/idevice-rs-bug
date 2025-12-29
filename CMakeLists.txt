@@ -1,7 +1,11 @@
 project(idevice-rs-test)
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
+
+if (APPLE) 
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0")
+endif()
 
 include_directories(include)
 find_package(PkgConfig REQUIRED)
@@ -16,7 +20,7 @@ set(IDEVICE_RS_LIB_PATH ${IDEVICE_RS_SOURCE_DIR}/target/release/libidevice_ffi.a
 # Any target that uses this output file will automatically depend on this command.
 add_custom_command(
     OUTPUT ${IDEVICE_RS_LIB_PATH}
-    COMMAND ${CARGO_EXECUTABLE} build --release --manifest-path ${IDEVICE_RS_SOURCE_DIR}/Cargo.toml
+    COMMAND ${CMAKE_COMMAND} -E env MACOSX_DEPLOYMENT_TARGET=14.0 ${CARGO_EXECUTABLE} build --release --manifest-path ${IDEVICE_RS_SOURCE_DIR}/Cargo.toml
     WORKING_DIRECTORY ${IDEVICE_RS_SOURCE_DIR}
     COMMENT "Building idevice-rs FFI library"
     VERBATIM

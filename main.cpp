@@ -139,30 +139,30 @@ void init_idescriptor_device(const std::string &ip,
                                  const_cast<IdevicePairingFile *>(pairing_file),
                                  "foo", &provider);
   if (err) {
-    println("Failed to create wireless provider");
+    std::cout << "Failed to create wireless provider\n";
     goto cleanup;
   }
 
   if (err) {
-    println("Failed to create provider");
+    std::cout << "Failed to create provider\n";
     goto cleanup;
   }
 
   err = lockdownd_connect(provider, &lockdown);
   if (err) {
-    println("Failed to connect to lockdown");
+    std::cout << "Failed to connect to lockdown\n";
     goto cleanup;
   }
 
   err = idevice_provider_get_pairing_file(provider, &pairing_file);
   if (err) {
-    println("Failed to get pairing file");
+    std::cout << "Failed to get pairing file\n";
     goto cleanup;
   }
 
   err = lockdownd_start_session(lockdown, pairing_file);
   if (err) {
-    println("Failed to start lockdown session");
+    std::cout << "Failed to start lockdown session\n";
     goto cleanup;
   }
 
@@ -172,30 +172,30 @@ void init_idescriptor_device(const std::string &ip,
   // Start heartbeat client to keep connection alive
   err = heartbeat_connect(provider, &heartbeat);
   if (err) {
-    printf("Failed to start Heartbeat service");
+    std::cout << "Failed to start Heartbeat service\n";
     goto cleanup;
   }
   heartbeatThread = new HeartBeatThread(heartbeat);
   heartbeatThread->start();
 
   if (err) {
-    println("Failed to connect to Heartbeat client");
+    std::cout << "Failed to connect to Heartbeat client\n";
     goto cleanup;
   }
 
-  println("Heartbeat client created successfully");
+  std::cout << "Heartbeat client created successfully\n";
   uint16_t afc_port;
   bool afc_ssl;
   err = lockdownd_start_service(lockdown, "com.apple.afc", &afc_port, &afc_ssl);
   if (err) {
-    println("Failed to start AFC service");
+    std::cout << "Failed to start AFC service\n";
     goto cleanup;
   }
 
   // 6. Create AFC client from provider
   err = afc_client_connect(provider, &afc_client);
   if (err) {
-    println("Failed to create AFC client");
+    std::cout << "Failed to create AFC client\n";
     goto cleanup;
   }
 
@@ -205,7 +205,7 @@ void init_idescriptor_device(const std::string &ip,
   initRes.heartbeatThread = heartbeatThread;
   return;
 cleanup:
-  println("Initialization failed");
+  std::cout << "Initialization failed\n";
   // Cleanup on error
 }
 
@@ -233,7 +233,7 @@ int main(int argc, char **argv) {
   }
 
   if (wait) {
-    println("Sleeping for 10 seconds");
+    std::cout << "Sleeping for 10 seconds\n";
     std::this_thread::sleep_for(std::chrono::seconds(10));
   }
 
@@ -241,9 +241,9 @@ int main(int argc, char **argv) {
   // AfcFileInfo info = {};
   // afc_get_file_info(initRes.afcClient, "/DCIM", &info);
 
-  // printf("Size: %zu, Blocks: %zu, Created: %lld, Modified: %lld\n",
-  // info.size,
-  //        info.blocks, info.creation, info.modified);
+  // std::cout << "Size: " << info.size << ", Blocks: " << info.blocks
+  //           << ", Created: " << info.creation << ", Modified: " <<
+  //           info.modified << "\n";
 
   char **info = nullptr;
   size_t count = 0;
