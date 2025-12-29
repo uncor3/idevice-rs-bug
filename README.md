@@ -1,7 +1,7 @@
 # How to build
 
 ```bash
-git clone this-repo --recursive
+git clone https://github.com/uncor3/idevice-rs-bug.git --recursive
 cd idevice-rs-test
 cmake -B build
 cmake --build build
